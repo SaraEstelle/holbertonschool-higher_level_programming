@@ -1,6 +1,7 @@
-#!/usr/bin/python33
+#!/usr/bin/python3
 def update_dictionary(a_dictionary, key, value):
-    """Updates a dictionary by adding a new key-value pair or updating an existing key's value.
+    """Updates a dictionary by adding
+    a new key-value pair or updating an existing key's value.
 
     Args:
         a_dictionary (dict): The dictionary to update.
