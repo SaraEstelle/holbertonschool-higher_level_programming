@@ -23,16 +23,23 @@ def number_keys(a_dictionary):
     # The other methods are provided for educational purposes to illustrate
     # different ways to achieve the same outcome in Python.
     # Note: In Python, dictionaries are implemented as hash tables,
-    # so accessing keys is generally efficient. Counting keys using len() is optimal
-    # because it directly retrieves the count without needing to iterate through the keys.
+    # so accessing keys is generally efficient.
+    # Counting keys using len() is optimal
+    # because it directly retrieves the count
+    # without needing to iterate through the keys.
     # The alternative methods involve additional overhead of creating
     # intermediate structures (like lists or generator expressions),
     # which is unnecessary when we only need the count.
     # Therefore, using len(a_dictionary) is the preferred approach.
-    # This function is useful in scenarios where we need to quickly
-    # determine the size of a dictionary, such as when validating input data,
-    # checking for the presence of certain keys, or managing collections of items.
-    # It is a common operation in many programming tasks involving dictionaries.
-    # In summary, while there are multiple ways to count the keys in a dictionary,
+    # This function is useful in scenarios
+    # where we need to quickly
+    # determine the size of a dictionary,
+    # such as when validating input data,
+    # checking for the presence of certain keys,
+    # or managing collections of items.
+    # It is a common operation in many programming
+    # tasks involving dictionaries.
+    # In summary, while there are multiple ways
+    # to count the keys in a dictionary,
     # using len() is the most efficient and straightforward method.
     # It is recommended to use this method in practice.
