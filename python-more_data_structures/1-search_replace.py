@@ -1,4 +1,4 @@
-#!/bin/usr/python3
+#!/usr/bin/python3
 def search_replace(my_list, search, replace):
     """Searches for an element in a list and replaces it with another element.
 
