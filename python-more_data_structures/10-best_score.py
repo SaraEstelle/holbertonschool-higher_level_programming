@@ -6,7 +6,8 @@ def best_score(a_dictionary):
         a_dictionary (dict): The dictionary to search.
 
     Returns:
-        The key with the highest value. If the dictionary is empty, returns None.
+        The key with the highest value.
+        If the dictionary is empty, returns None.
     """
     if not a_dictionary:
         return None
