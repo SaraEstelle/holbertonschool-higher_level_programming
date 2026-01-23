@@ -1,40 +1,56 @@
 #!/usr/bin/python3
 """
-This module provides a function that divides all elements of a matrix.
-It validates the matrix structure and the divisor before performing
-the division and returns a new matrix with rounded results.
+Module that provides matrix division functionality.
+
+This module contains a function to divide all elements of a matrix.
 """
 
 
 def matrix_divided(matrix, div):
-    """Divide all elements of a matrix by a number.
+    """Divides all elements of a matrix by a number.
 
-    Returns a new matrix with elements rounded to 2 decimals.
+    Args:
+        matrix: List of lists of integers or floats
+        div: Number (integer or float) to divide by
+
+    Returns:
+        A new matrix with all elements divided by div, rounded to 2 decimals
+
+    Raises:
+        TypeError: If matrix is not a list of lists of integers/floats
+        TypeError: If rows have different sizes
+        TypeError: If div is not a number
+        ZeroDivisionError: If div is zero
     """
-    # Validate matrix is a list of lists
-    if (not isinstance(matrix, list) or
-            any(not isinstance(row, list) for row in matrix)):
-        raise TypeError("matrix must be a matrix (list of lists) "
-                        "of integers/floats")
+    error_msg = "matrix must be a matrix (list of lists) of integers/floats"
 
-    # Validate all elements are int/float
+    # Check if matrix is a list
+    if not isinstance(matrix, list) or len(matrix) == 0:
+        raise TypeError(error_msg)
+
+    # Check if matrix is a list of lists with valid elements
     for row in matrix:
-        for element in row:
-            if not isinstance(element, (int, float)):
-                raise TypeError("matrix must be a matrix (list of lists) "
-                                "of integers/floats")
+        if not isinstance(row, list) or len(row) == 0:
+            raise TypeError(error_msg)
+        for elem in row:
+            if not isinstance(elem, (int, float)):
+                raise TypeError(error_msg)
 
-    # Validate all rows have same size
-    row_length = len(matrix[0])
-    if any(len(row) != row_length for row in matrix):
-        raise TypeError("Each row of the matrix must have the same size")
+    # Check that each row has the same size
+    row_size = len(matrix[0])
+    for row in matrix:
+        if len(row) != row_size:
+            raise TypeError("Each row of the matrix must have the same size")
 
-    # Validate div
+    # Check if div is a number (integer or float)
     if not isinstance(div, (int, float)):
         raise TypeError("div must be a number")
 
+    # Prevent division by zero
     if div == 0:
         raise ZeroDivisionError("division by zero")
 
-    # Return new matrix
-    return [[round(element / div, 2) for element in row] for row in matrix]
+    # Divide each element and round to 2 decimal places
+    new_matrix = [[round(elem / div, 2) for elem in row] for row in matrix]
+
+    return new_matrix
