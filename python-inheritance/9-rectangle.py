@@ -3,6 +3,7 @@
 Define a Rectangle class that inherits from BaseGeometry.
 """
 
+
 class BaseGeometry:
     """Base class for geometry objects."""
 
