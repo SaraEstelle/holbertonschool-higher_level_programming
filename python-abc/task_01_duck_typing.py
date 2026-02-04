@@ -1,4 +1,4 @@
-#!/usr/bin/ env python3
+#!/usr/bin/env python3
 """Shapes, interfaces, and duck typing """
 
 from abc import ABC, abstractmethod
@@ -18,7 +18,7 @@ class Shape(ABC):
 
 
 class Circle(Shape):
-    """Circle shape implementing area and perimerter."""
+    """Circle shape implementing area and perimeter."""
 
     def __init__(self, radius):
         self.radius = radius
@@ -27,11 +27,11 @@ class Circle(Shape):
         return math.pi * (self.radius ** 2)
 
     def perimeter(self):
-        return 2 *math.pi * self.radius
+        return 2 * math.pi * self.radius
 
 
 class Rectangle(Shape):
-    """Rectangle shape implementing area and permimeter."""
+    """Rectangle shape implementing area and perimeter."""
 
     def __init__(self, width, height):
         self.width = width
