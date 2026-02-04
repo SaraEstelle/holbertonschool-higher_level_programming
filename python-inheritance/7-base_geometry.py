@@ -1,14 +1,18 @@
 #!/usr/bin/python3
 """
-Defines a BaseGeometry class that extends 6-base_geometry.
+Defines the BaseGeometry class, extending 6-base_geometry with integer validation.
 """
 
-# Import the BaseGeometry class from 6-base_geometry.py
-BaseGeometry = __import__('6-base_geometry').BaseGeometry
+# Import BaseGeometry from 6-base_geometry
+BaseGeometry6 = __import__('6-base_geometry').BaseGeometry
 
 
-class BaseGeometry(BaseGeometry):
-    """Extends BaseGeometry with integer validation."""
+class BaseGeometry(BaseGeometry6):
+    """BaseGeometry: provides base geometry utilities with integer validation."""
+
+    def area(self):
+        """Raise an Exception with the message 'area() is not implemented'."""
+        raise Exception("area() is not implemented")
 
     def integer_validator(self, name, value):
         """Validate that 'value' is an integer greater than 0.
@@ -21,7 +25,7 @@ class BaseGeometry(BaseGeometry):
             TypeError: if value is not an int
             ValueError: if value is <= 0
         """
-        if type(value) is not int:
+        if not isinstance(value, int):
             raise TypeError(f"{name} must be an integer")
         if value <= 0:
             raise ValueError(f"{name} must be greater than 0")
