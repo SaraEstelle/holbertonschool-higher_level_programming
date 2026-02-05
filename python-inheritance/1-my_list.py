@@ -6,4 +6,7 @@ class MyList(list):
     """Represents a list with additional functionality."""
     def print_sorted(self):
         """Prints the list in ascending sorted order."""
-        print(sorted(self))
+
+        cpy_self = self.copy()
+        cpy_self.sort()
+        print(cpy_self)
