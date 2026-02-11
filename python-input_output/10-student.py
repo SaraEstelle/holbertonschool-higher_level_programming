@@ -28,6 +28,11 @@ class Student:
         Returns:
             dict: Dictionary of the student's attributes.
         """
+        result = {}
         if isinstance(attrs, list) and all(isinstance(x, str) for x in attrs):
-            return {key: self.__dict__[key] for key in attrs if key in self.__dict__}
-        return self.__dict__
+            for key in attrs:
+                if key in self.__dict__:
+                    result[key] = self.__dict__[key]
+            return result
+        # Return a copy of all attributes, not self.__dict__ directly
+        return dict(self.__dict__)
