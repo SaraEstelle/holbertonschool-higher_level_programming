@@ -1,9 +1,13 @@
 #!/usr/bin/python3
-"""Module that defines a Student class with JSON serialization and filtering."""
+"""Module that defines a Student class with
+JSON serialization and filtering.
+"""
 
 
 class Student:
-    """Class that defines a student with first name, last name, and age."""
+    """Class that defines a student with
+    first name, last name, and age.
+    """
 
     def __init__(self, first_name, last_name, age):
         """Initialize a Student instance."""
@@ -13,6 +17,11 @@ class Student:
 
     def to_json(self, attrs=None):
         """Retrieve a dictionary representation of the student."""
-        if isinstance(attrs, list) and all(isinstance(x, str) for x in attrs):
-            return {key: self.__dict__[key] for key in attrs if key in self.__dict__}
+        if isinstance(attrs, list) and \
+                all(isinstance(x, str) for x in attrs):
+            return {
+                key: self.__dict__[key]
+                for key in attrs
+                if key in self.__dict__
+            }
         return dict(self.__dict__)
