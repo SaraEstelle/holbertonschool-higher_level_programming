@@ -1,10 +1,10 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 """Simple HTTP API using http.server with 404 handling."""
 
 
-class SimpleAPIHandler(BaseHTTPRequestHandler):
+class MyHandler(BaseHTTPRequestHandler):
     """
     Handle GET requests and return
     text/JSON responses based on the requested path.
@@ -22,26 +22,28 @@ class SimpleAPIHandler(BaseHTTPRequestHandler):
 
         elif self.path == "/status":
             self.send_response(200)
-            self.send_header("Content-type", "application/json")
+            self.send_header("Content-Type", "application/json")
             self.end_headers()
-            self.wfile.write(json.dumps({"status": "OK"}).encode())
+            self.wfile.write(b"OK")
 
         elif self.path == "/data":
             self.send_response(200)
-            self.send_header("Content-type", "application/json")
-            self.end_headers()
             data = {"name": "John", "age": 30, "city": "New York"}
-            self.wfile.write(json.dumps(data).encode("utf-8"))
+            json_dict = json.dumps(data)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(json_dict.encode("utf-8"))
 
         elif self.path == "/info":
             self.send_response(200)
-            self.send_header("Content-type", "application/json")
-            self.end_headers()
             data = {
                 "version": "1.0",
                 "description": "A simple API built with http.server"
-                }
-            self.wfile.write(json.dumps(data).encode("utf-8"))
+            }
+            json_dict = json.dumps(data)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(json_dict.encode("utf-8"))
 
         else:
             self.send_response(404)
@@ -51,6 +53,5 @@ class SimpleAPIHandler(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    server = HTTPServer(("", 8000), SimpleAPIHandler)
-    print("Starting server on port 8000...")
+    server = HTTPServer(("", 8000), MyHandler)
     server.serve_forever()
