@@ -1,0 +1,100 @@
+#!/usr/bin/python3
+"""
+Flask API demonstrating Basic Authentication, JWT authentication,
+and role-based access control.
+
+Endpoints:
+- /basic-protected: Protected with Basic Auth
+- /login: Obtain a JWT token
+- /jwt-protected: Protected with JWT token
+- /admin-only: Protected with JWT token, admin role required
+"""
+
+from flask import Flask, jsonify, request
+from flask_httpauth import HTTPBasicAuth
+from flask_jwt_extended import (
+    JWTManager, create_access_token, jwt_required, get_jwt
+)
+from werkzeug.security import generate_password_hash, check_password_hash
+
+# ------------------ App Setup ------------------ #
+app = Flask(__name__)
+# Secret key for JWT token signing
+app.config["JWT_SECRET_KEY"] = "super-secret-key"
+
+# Auth objects
+auth = HTTPBasicAuth()  # For Basic Authentication
+jwt = JWTManager(app)   # For JWT token authentication
+
+# ------------------ In-memory User Storage ------------------ #
+users = {
+    "user1": {
+        "username": "user1",
+        "password": generate_password_hash("password"),
+        "role": "user"
+    },
+    "admin1": {
+        "username": "admin1",
+        "password": generate_password_hash("password"),
+        "role": "admin"
+    }
+}
+
+# ------------------ Basic Auth ------------------ #
+@auth.verify_password
+def verify_password(username, password):
+    """Verify username and password for Basic Auth."""
+    user = users.get(username)
+    if not user:
+        return False
+    return check_password_hash(user["password"], password)
+
+@app.route("/basic-protected")
+@auth.login_required
+def basic_protected():
+    """Return message if Basic Auth credentials are valid."""
+    return "Basic Auth: Access Granted"
+
+# ------------------ JWT Authentication ------------------ #
+@app.route("/login", methods=["POST"])
+def login():
+    """
+    Login endpoint: Accepts JSON payload with username and password.
+    Returns a JWT token if credentials are valid.
+    """
+    if not request.is_json:
+        return jsonify({"error": "Invalid JSON"}), 400
+
+    username = request.json.get("username")
+    password = request.json.get("password")
+    user = users.get(username)
+
+    if not user or not check_password_hash(user["password"], password):
+        return jsonify({"error": "Invalid credentials"}), 401
+
+    # Include username and role in the JWT payload
+    access_token = create_access_token(identity={"username": username, "role": user["role"]})
+    return jsonify({"access_token": access_token})
+
+@app.route("/jwt-protected")
+@jwt_required()
+def jwt_protected():
+    """Return message if a valid JWT token is provided."""
+    return "JWT Auth: Access Granted"
+
+@app.route("/admin-only")
+@jwt_required()
+def admin_only():
+    """
+    Admin-only route:
+    Requires JWT token with role = 'admin'.
+    Returns 403 if role is not admin.
+    """
+    identity = get_jwt()  # Get current JWT payload
+    if identity.get("role") != "admin":
+        return jsonify({"error": "Admin access required"}), 403
+    return "Admin Access: Granted"
+
+# ------------------ Run Server ------------------ #
+if __name__ == "__main__":
+    app.run()
