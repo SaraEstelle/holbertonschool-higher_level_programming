@@ -26,6 +26,37 @@ app.config["JWT_SECRET_KEY"] = "super-secret-key"
 auth = HTTPBasicAuth()  # For Basic Authentication
 jwt = JWTManager(app)   # For JWT token authentication
 
+# ------------------ JWT Error Handlers ------------------ #
+
+@jwt.unauthorized_loader
+def handle_unauthorized_error(err):
+    """Handle missing JWT token."""
+    return jsonify({"error": "Missing or invalid token"}), 401
+
+
+@jwt.invalid_token_loader
+def handle_invalid_token_error(err):
+    """Handle invalid JWT token."""
+    return jsonify({"error": "Invalid token"}), 401
+
+
+@jwt.expired_token_loader
+def handle_expired_token_error(jwt_header, jwt_payload):
+    """Handle expired JWT token."""
+    return jsonify({"error": "Token has expired"}), 401
+
+
+@jwt.revoked_token_loader
+def handle_revoked_token_error(jwt_header, jwt_payload):
+    """Handle revoked JWT token."""
+    return jsonify({"error": "Token has been revoked"}), 401
+
+
+@jwt.needs_fresh_token_loader
+def handle_needs_fresh_token_error(jwt_header, jwt_payload):
+    """Handle non-fresh JWT token."""
+    return jsonify({"error": "Fresh token required"}), 401
+
 # ------------------ In-memory User Storage ------------------ #
 users = {
     "user1": {
