@@ -47,13 +47,13 @@ def handle_expired_token_error(jwt_header, jwt_payload):
 
 
 @jwt.revoked_token_loader
-def handle_revoked_token_error(jwt_header, jwt_payload):
+def handle_revoked_token_error(err):
     """Handle revoked JWT token."""
     return jsonify({"error": "Token has been revoked"}), 401
 
 
 @jwt.needs_fresh_token_loader
-def handle_needs_fresh_token_error(jwt_header, jwt_payload):
+def handle_needs_fresh_token_error(err):
     """Handle non-fresh JWT token."""
     return jsonify({"error": "Fresh token required"}), 401
 
