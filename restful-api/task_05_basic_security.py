@@ -20,7 +20,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # ------------------ App Setup ------------------ #
 app = Flask(__name__)
 # Secret key for JWT token signing
-app.config["JWT_SECRET_KEY"] = "super-secret-key"
+app.config["JWT_SECRET_KEY"] = "secret-key"
 
 # Auth objects
 auth = HTTPBasicAuth()  # For Basic Authentication
@@ -80,7 +80,7 @@ def verify_password(username, password):
         return False
     return check_password_hash(user["password"], password)
 
-@app.route("/basic-protected")
+@app.route("/basic-protected", methods=["GET"])
 @auth.login_required
 def basic_protected():
     """Return message if Basic Auth credentials are valid."""
@@ -94,13 +94,11 @@ def login():
     Returns a JWT token if credentials are valid.
     """
     data = request.get_json(silent=True)
-
-
-    if not data:
+    if data is None:
         return jsonify({"error": "Invalid credentials"}), 401
-
-    username = request.json.get("username")
-    password = request.json.get("password")
+    else:
+        username = data.get("username", None)
+        password = data.get("password", None)
 
     if not username or not password:
         return jsonify({"error": "Invalid credentials"}), 401
@@ -114,13 +112,13 @@ def login():
     access_token = create_access_token(identity=username)
     return jsonify({"access_token": access_token})
 
-@app.route("/jwt-protected")
+@app.route("/jwt-protected", methods=["GET"])
 @jwt_required()
 def jwt_protected():
     """Return message if a valid JWT token is provided."""
     return "JWT Auth: Access Granted"
 
-@app.route("/admin-only")
+@app.route("/admin-only", methods=["GET"])
 @jwt_required()
 def admin_only():
     """
@@ -133,6 +131,8 @@ def admin_only():
 
     if user_role != "admin":
         return jsonify({"error": "Admin access required"}), 403
+
+    return "Admin Access Granted"
 
 # ------------------ Run Server ------------------ #
 if __name__ == "__main__":
