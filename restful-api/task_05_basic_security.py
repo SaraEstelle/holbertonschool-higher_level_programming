@@ -13,7 +13,7 @@ Endpoints:
 from flask import Flask, jsonify, request
 from flask_httpauth import HTTPBasicAuth
 from flask_jwt_extended import (
-    JWTManager, create_access_token, jwt_required, get_jwt
+    JWTManager, create_access_token, jwt_required, get_jwt_identity
 )
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -93,18 +93,25 @@ def login():
     Login endpoint: Accepts JSON payload with username and password.
     Returns a JWT token if credentials are valid.
     """
-    if not request.is_json:
-        return jsonify({"error": "Invalid JSON"}), 400
+    data = request.get_json(silent=True)
+
+
+    if not data:
+        return jsonify({"error": "Invalid credentials"}), 401
 
     username = request.json.get("username")
     password = request.json.get("password")
+
+    if not username or not password:
+        return jsonify({"error": "Invalid credentials"}), 401
+
     user = users.get(username)
 
     if not user or not check_password_hash(user["password"], password):
         return jsonify({"error": "Invalid credentials"}), 401
 
     # Include username and role in the JWT payload
-    access_token = create_access_token(identity={"username": username, "role": user["role"]})
+    access_token = create_access_token(identity=username)
     return jsonify({"access_token": access_token})
 
 @app.route("/jwt-protected")
@@ -121,10 +128,11 @@ def admin_only():
     Requires JWT token with role = 'admin'.
     Returns 403 if role is not admin.
     """
-    identity = get_jwt()  # Get current JWT payload
-    if identity.get("role") != "admin":
+    identity = get_jwt_identity()  # Get current JWT payload
+    user_role = users[identity]["role"]
+
+    if user_role != "admin":
         return jsonify({"error": "Admin access required"}), 403
-    return "Admin Access: Granted"
 
 # ------------------ Run Server ------------------ #
 if __name__ == "__main__":
