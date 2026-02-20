@@ -20,7 +20,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # ------------------ App Setup ------------------ #
 app = Flask(__name__)
 # Secret key for JWT token signing
-app.config["JWT_SECRET_KEY"] = "secret-key"
+app.config["JWT_SECRET_KEY"] = "secret_key"
 
 # Auth objects
 auth = HTTPBasicAuth()  # For Basic Authentication
@@ -76,9 +76,12 @@ users = {
 def verify_password(username, password):
     """Verify username and password for Basic Auth."""
     user = users.get(username)
-    if not user:
-        return False
-    return check_password_hash(user["password"], password)
+    if (
+        username in users
+        and check_password_hash(users[username]["password"], password)
+    ):
+        return username
+    return None
 
 @app.route("/basic-protected", methods=["GET"])
 @auth.login_required
@@ -132,7 +135,7 @@ def admin_only():
     if user_role != "admin":
         return jsonify({"error": "Admin access required"}), 403
 
-    return "Admin Access Granted"
+    return "Admin Access: Granted"
 
 # ------------------ Run Server ------------------ #
 if __name__ == "__main__":
