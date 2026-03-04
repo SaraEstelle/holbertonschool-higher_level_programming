@@ -1,5 +1,5 @@
 -- Create table second_table and insert multiple rows
-CREATE TABLE IF NOT EXISTSsecond_table (
+CREATE TABLE IF NOT EXISTS second_table (
     id INT,
     name VARCHAR(256),
     score INT
