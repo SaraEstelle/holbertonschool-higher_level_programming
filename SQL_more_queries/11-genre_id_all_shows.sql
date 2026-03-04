@@ -1,4 +1,4 @@
--- Script that lists all shwos and their genre_id (NULL if no genre) from hbtn_0d_tvshows
+-- Script that lists all shows and their genre_id (NULL if no genre) from hbtn_0d_tvshows
 
 -- Select show title and genre_id (NULL when no genre), ordered by title and genre_id
 SELECT tv_shows.title, tv_show_genres.genre_id
