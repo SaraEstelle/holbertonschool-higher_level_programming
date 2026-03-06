@@ -9,12 +9,10 @@ import sys
 
 
 if __name__ == "__main__":
-    # Retrieve arguments
     username = sys.argv[1]
     password = sys.argv[2]
     database = sys.argv[3]
 
-    # Connect to MySQL database
     db = MySQLdb.connect(
         host="localhost",
         port=3306,
@@ -23,21 +21,16 @@ if __name__ == "__main__":
         db=database
     )
 
-    # Create a cursor
     cursor = db.cursor()
 
-    # Execute SQL query
     cursor.execute(
-        "SELECT * FROM states WHERE name LIKE 'N%' ORDER BY states.id ASC"
+        "SELECT * FROM states WHERE BINARY name LIKE 'N%' ORDER BY id ASC"
     )
 
-    # Fetch all rows
     rows = cursor.fetchall()
 
-    # Print results
     for row in rows:
         print(row)
 
-    # Close cursor and connection
     cursor.close()
     db.close()
