@@ -9,13 +9,11 @@ import sys
 
 
 if __name__ == "__main__":
-    # Get arguments
     username = sys.argv[1]
     password = sys.argv[2]
     database = sys.argv[3]
     state_name = sys.argv[4]
 
-    # Connect to MySQL
     db = MySQLdb.connect(
         host="localhost",
         port=3306,
@@ -24,22 +22,16 @@ if __name__ == "__main__":
         db=database
     )
 
-    # Create cursor
     cursor = db.cursor()
 
-    # Create SQL query using format
-    query = "SELECT * FROM states WHERE name = '{}' ORDER BY states.id ASC".format(state_name)
+    query = "SELECT * FROM states WHERE BINARY name = '{}' ORDER BY id ASC".format(state_name)
 
-    # Execute query
     cursor.execute(query)
 
-    # Fetch results
     rows = cursor.fetchall()
 
-    # Print results
     for row in rows:
         print(row)
 
-    # Close connection
     cursor.close()
     db.close()
