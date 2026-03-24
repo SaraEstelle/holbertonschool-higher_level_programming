@@ -8,7 +8,7 @@ document.addEventListener('DOMContenLoaded', function() {
   // Ecouter le clic sur le bouton "Translate"
   btnTranslate.addEventListener('click', function () {
     // Récuperer la valeur séléctionné dans le combo box ( ex: "fr , en , es")
-    const lang = languageCode.ariaValueMax;
+    const lang = languageCode.value;
 
     // Construit l'URL avec le code langue séléctionné
     fetch('https://hellosalut.stefanbohacek.com/?lang=' + lang)
