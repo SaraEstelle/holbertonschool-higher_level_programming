@@ -1,5 +1,5 @@
 // On attend que le DOM soit entièrement chargé
-document.addEventListener('DOMContenLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
   // Séléctionner le combo box, le bouton et le div d'affichage
   const languageCode = document.querySelector('#language_code');
   const btnTranslate = document.querySelector('#btn_translate');
