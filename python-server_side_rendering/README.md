@@ -1,231 +1,241 @@
-# JavaScript - DOM Manipulation 🌐
+# Python - Server-Side Rendering
 
-## Background Context
+> **Holberton School** — Higher Level Programming
+---
 
-JavaScript is used to make web pages **dynamic and interactive**. In this project, we use JavaScript to manipulate the **DOM (Document Object Model)** — the in-memory representation of an HTML page — to update content, styles, and structure **without reloading the page**.
+## 📋 Description
 
-We also learn how to communicate with external APIs using **XmlHTTPRequest** and the modern **Fetch API**.
+This project explores **Server-Side Rendering (SSR)** using Python and Flask.
+Unlike client-side rendering where the browser builds the page with JavaScript, SSR generates fully formed HTML on the server before sending it to the client — making pages faster to display, easier to index by search engines, and simpler to maintain.
+
+Through four progressive tasks, this project covers:
+- Python string templating from scratch
+- Building a Flask application with Jinja2 templates
+- Dynamic content rendering with loops and conditions
+- Reading data from JSON, CSV, and SQLite databases
+- Handling query parameters and edge cases
 
 ---
 
-## Resources
+## 🗂️ Project Structure
 
-Read or watch:
-
-- [What is JavaScript?](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/First_steps/What_is_JavaScript)
-- [Introduction to the DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction)
-- [Document Interface](https://developer.mozilla.org/en-US/docs/Web/API/Document)
-- [Element Class](https://developer.mozilla.org/en-US/docs/Web/API/Element)
-- [Locating DOM elements using selectors](https://developer.mozilla.org/en-US/docs/Web/API/Document_object_model/Locating_DOM_elements_using_selectors)
-- [CSS Selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_selectors)
-- [CSS Diner — Play with Selectors](https://flukeout.github.io/)
-- [DOM Scripting](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Manipulating_documents)
-- [Network Requests](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Fetching_data)
-- [What went wrong? Troubleshooting JavaScript](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/First_steps/What_went_wrong)
-
----
-
-## Learning Objectives
-
-At the end of this project, you are expected to be able to explain to anyone, **without the help of Google**:
-
-- How to select HTML elements in JavaScript
-- The differences between ID, class, and tag name selectors
-- How to modify an HTML element style
-- How to get and update an HTML element content
-- How to modify the DOM
-- How to make a request with XmlHTTPRequest
-- How to make a request with Fetch API
-- How to listen/bind to DOM events
-- How to listen/bind to user events
+```
+python-server_side_rendering/
+├── task_00_intro.py          # String templating without frameworks
+├── task_01_jinja.py          # Basic Flask app with Jinja2 templates
+├── task_02_logic.py          # Loops and conditions in templates
+├── task_03_files.py          # JSON and CSV data sources
+├── task_04_db.py             # SQLite as data source
+│
+├── items.json                # Data for task 02
+├── products.json             # Product data for tasks 03 & 04
+├── products.csv              # Product data in CSV format
+├── products.db               # SQLite database (generated)
+├── create_db.py              # Script to initialize the database
+├── template.txt              # Invitation template for task 00
+│
+└── templates/
+    ├── index.html            # Home page
+    ├── about.html            # About page
+    ├── contact.html          # Contact page
+    ├── header.html           # Reusable header component
+    ├── footer.html           # Reusable footer component
+    ├── items.html            # Dynamic items list (task 02)
+    └── product_display.html  # Products table with error handling (tasks 03 & 04)
+```
 
 ---
 
-## Requirements
+## ⚙️ Requirements
 
-- **Allowed editors:** All of them
-- All files will be interpreted on **Chrome browser** (version 57.0 or later)
-- All files should end with a new line
-- A mandatory `README.md` file at the root of the project folder
-- Code must be `semistandard` compliant
-- You are **not allowed to use `var`**
-- HTML should **not reload** for each action: DOM manipulation, update values, fetch data…
-
----
-
-## Installation
-
-### Install semistandard
+- Python 3.x
+- Flask
 
 ```bash
-sudo npm install semistandard --global
+pip install Flask
 ```
 
-### Verify installation
+No other external dependencies — `json`, `csv`, and `sqlite3` are all part of Python's standard library.
+
+---
+
+## 🚀 Tasks
+
+### Task 0 — Python String Templating
+**File:** `task_00_intro.py`
+
+Generates personalized invitation files from a template using Python's `.replace()` method.
+
+**Key concepts:** `str.replace()`, `isinstance()`, `dict.get()`, file I/O, input validation
 
 ```bash
-semistandard --version
+python3 -c "
+from task_00_intro import generate_invitations
+with open('template.txt', 'r') as f:
+    template = f.read()
+attendees = [
+    {'name': 'Alice', 'event_title': 'Python Conference', 'event_date': '2023-07-15', 'event_location': 'New York'},
+    {'name': 'Bob', 'event_title': 'Data Science Workshop', 'event_date': '2023-08-20', 'event_location': 'San Francisco'},
+    {'name': 'Charlie', 'event_title': 'AI Summit', 'event_date': None, 'event_location': 'Boston'}
+]
+generate_invitations(template, attendees)
+"
+# Output: output_1.txt, output_2.txt, output_3.txt
 ```
 
-### Check your files
+Error handling:
+- Empty template → logs message and stops
+- Empty attendee list → logs message and stops
+- Missing field in dict → replaced with `"N/A"`
+- Wrong input types → logs error and stops
+
+---
+
+### Task 1 — Basic Flask + Jinja2 Templates
+**File:** `task_01_jinja.py`
+
+A Flask application serving three pages (Home, About, Contact) with a shared header and footer using Jinja's `{% include %}`.
+
+**Key concepts:** Flask routes, `render_template()`, `{% include %}`, reusable components
 
 ```bash
-semistandard <filename>.js
+python3 task_01_jinja.py
 ```
 
-### Auto-fix errors
+| Route | Page |
+|---|---|
+| `/` | Home |
+| `/about` | About Us |
+| `/contact` | Contact Us |
+
+---
+
+### Task 2 — Dynamic Templates with Loops and Conditions
+**File:** `task_02_logic.py`
+
+Reads a list of items from `items.json` and displays them dynamically. Handles the empty list case with a conditional message.
+
+**Key concepts:** `json.load()`, Jinja `{% for %}`, Jinja `{% if %}`, passing data to templates
 
 ```bash
-semistandard --fix <filename>.js
+python3 task_02_logic.py
+```
+
+| Route | Description |
+|---|---|
+| `/items` | Displays item list or "No items found" if empty |
+
+Test with empty list by editing `items.json`:
+```json
+{ "items": [] }
 ```
 
 ---
 
-## How to test
+### Task 3 — JSON and CSV Data Sources
+**File:** `task_03_files.py`
 
-Each task comes with an HTML file. Open it in Chrome using **Live Server** (VS Code extension) to test fetch requests properly:
+A `/products` route that reads from either `products.json` or `products.csv` based on a `source` query parameter. Supports optional filtering by `id`.
 
+**Key concepts:** `csv.DictReader`, `request.args`, query parameters, error messages in templates
+
+```bash
+python3 task_03_files.py
 ```
-1. Install Live Server extension in VS Code
-2. Right-click on the .html file → Open with Live Server
-3. Chrome opens at http://127.0.0.1:5500/
-```
 
-> ⚠️ Do NOT open HTML files directly with `file://` — Fetch API requests will be blocked by the browser's security policy.
+| URL | Result |
+|---|---|
+| `/products?source=json` | All products from JSON |
+| `/products?source=csv` | All products from CSV |
+| `/products?source=json&id=1` | Single product filtered by id |
+| `/products?source=json&id=99` | "Product not found" |
+| `/products?source=xml` | "Wrong source" |
 
 ---
 
-## Tasks
+### Task 4 — SQLite Database Source
+**File:** `task_04_db.py`
 
-| File | Description |
-|------|-------------|
-| `0-script.js` | Updates the `<header>` text color to red using `document.querySelector` |
-| `1-script.js` | Turns the `<header>` red when user clicks on `#red_header` |
-| `2-script.js` | Adds the CSS class `red` to `<header>` when user clicks on `#red_header` |
-| `3-script.js` | Toggles `<header>` class between `red` and `green` on click of `#toggle_header` |
-| `4-script.js` | Adds a `<li>Item</li>` to `.my_list` when user clicks on `#add_item` |
-| `5-script.js` | Updates `<header>` text to `New Header!!!` when user clicks on `#update_header` |
-| `6-script.js` | Fetches a Star Wars character name from the SWAPI and displays it in `#character` |
-| `7-script.js` | Fetches all Star Wars movie titles from the SWAPI and lists them in `#list_movies` |
-| `8-script.js` | Fetches the French translation of "hello" and displays it in `#hello` (script in `<head>`) |
-| `100-script.js` | *(Advanced)* Adds, removes, and clears `<li>` elements from a list on button click |
-| `101-script.js` | *(Advanced)* Fetches the translation of "hello" based on the language selected in a combo box |
+Extends Task 3 by adding `source=sql` which reads from a SQLite database. All three sources use the same template.
+
+**Key concepts:** `sqlite3`, `row_factory`, `conn.commit()`, `CREATE TABLE IF NOT EXISTS`
+
+```bash
+# Step 1: Create the database (run once)
+python3 create_db.py
+
+# Step 2: Launch the app
+python3 task_04_db.py
+```
+
+| URL | Result |
+|---|---|
+| `/products?source=sql` | All products from SQLite |
+| `/products?source=sql&id=1` | Laptop only |
+| `/products?source=sql&id=99` | "Product not found" |
 
 ---
 
-## Key Concepts
+## 📊 Data Files
 
-### Selecting HTML elements
-
-```javascript
-// By tag name
-document.querySelector('header');
-
-// By ID
-document.querySelector('#myId');
-
-// By class
-document.querySelector('.myClass');
-
-// All matching elements
-document.querySelectorAll('.myClass');
+### items.json
+```json
+{
+    "items": ["Python Book", "Flask Mug", "Jinja Sticker"]
+}
 ```
 
-### Selectors — ID vs Class vs Tag
-
-| Selector | Syntax | Unique? | Example |
-|----------|--------|---------|---------|
-| Tag | `'header'` | ❌ No | All `<header>` elements |
-| ID | `'#myId'` | ✅ Yes | Element with `id="myId"` |
-| Class | `'.myClass'` | ❌ No | All elements with `class="myClass"` |
-
-### Modifying style
-
-```javascript
-// Direct style (inline)
-element.style.color = '#FF0000';
-element.style.backgroundColor = 'blue';
-
-// Via CSS class (recommended)
-element.classList.add('red');
-element.classList.remove('red');
-element.classList.toggle('red');
-element.classList.contains('red'); // → true/false
+### products.json
+```json
+[
+    {"id": 1, "name": "Laptop", "category": "Electronics", "price": 799.99},
+    {"id": 2, "name": "Coffee Mug", "category": "Home Goods", "price": 15.99},
+    {"id": 3, "name": "Python Book", "category": "Education", "price": 39.99}
+]
 ```
 
-### Getting and updating content
-
-```javascript
-element.textContent = 'New text';   // safe (no HTML interpretation)
-element.innerHTML = '<b>Bold</b>';  // interprets HTML (⚠️ XSS risk)
-input.value;                        // read input field value
+### products.csv
 ```
-
-### Modifying the DOM
-
-```javascript
-const li = document.createElement('li'); // create
-li.textContent = 'Item';                 // fill
-parent.appendChild(li);                 // insert at end
-parent.removeChild(li);                 // remove child
-li.remove();                            // remove self
-parent.innerHTML = '';                  // clear all
-parent.lastElementChild;               // get last child
-```
-
-### Listening to events
-
-```javascript
-element.addEventListener('click', function () {
-  // code to run on click
-});
-```
-
-### Script in `<head>` — DOMContentLoaded
-
-```javascript
-// Required when script is loaded in <head>
-document.addEventListener('DOMContentLoaded', function () {
-  // DOM is fully loaded here
-  const el = document.querySelector('#myElement');
-});
-```
-
-### Fetch API
-
-```javascript
-fetch('https://api.example.com/data')
-  .then(function (response) {
-    return response.json();
-  })
-  .then(function (data) {
-    document.querySelector('#result').textContent = data.name;
-  })
-  .catch(function (error) {
-    console.log('Error:', error);
-  });
+id,name,category,price
+1,Laptop,Electronics,799.99
+2,Coffee Mug,Home Goods,15.99
+3,Python Book,Education,39.99
 ```
 
 ---
 
-## Common Mistakes to Avoid
+## 🔑 Key Concepts Summary
 
-| ❌ Wrong | ✅ Correct | Why |
-|---------|----------|-----|
-| `'Click'` | `'click'` | Events are always lowercase |
-| `'DOMContenLoaded'` | `'DOMContentLoaded'` | Typo — missing `t` |
-| `Response.json()` | `response.json()` | Must match the parameter name |
-| `apprendChild()` | `appendChild()` | Typo |
-| `fuction` | `function` | Typo |
-| `console.Log()` | `console.log()` | Lowercase only |
-| `var` | `const` / `let` | `var` is forbidden |
-| 4-space indent | 2-space indent | semistandard rule |
+| Task | What you learn |
+|---|---|
+| Task 0 | Manual templating — understand what Jinja does under the hood |
+| Task 1 | Flask routing + `{% include %}` for DRY templates |
+| Task 2 | `{% for %}` + `{% if %}` — Jinja logic in templates |
+| Task 3 | Multiple data sources, query params, error handling |
+| Task 4 | SQLite integration — one template, three data sources |
+
+### SSR vs Client-Side Rendering
+
+| | SSR (this project) | CSR (React, Vue...) |
+|---|---|---|
+| HTML built by | Server (Python/Flask) | Browser (JavaScript) |
+| First load speed | Fast — HTML ready to display | Slow — JS must run first |
+| SEO | Excellent — crawlers see full HTML | Harder — crawlers may miss content |
+| Complexity | Simpler for data-heavy pages | Better for highly interactive UIs |
 
 ---
 
-## Author
+## 📚 Resources
 
-- **Project by:** REBATI SARA
-- **School:** Holberton School
-- **Repository:** `holbertonschool-higher_level_programming`
-- **Directory:** `javascript-dom_manipulation`
+- [Flask Documentation](https://flask.palletsprojects.com/)
+- [Jinja2 Documentation](https://jinja.palletsprojects.com/)
+- [Python sqlite3 Module](https://docs.python.org/3/library/sqlite3.html)
+- [Python csv Module](https://docs.python.org/3/library/csv.html)
+- [Python json Module](https://docs.python.org/3/library/json.html)
+
+---
+
+## 👤 Author
+
+**Sara Estelle**
+Holberton School — Higher Level Programming
