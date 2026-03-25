@@ -1,32 +1,33 @@
 def generate_invitations(template, attendees):
 
-    # 1- vérifier les types
+    # 1- vérifier les types de template
     if not isinstance(template, str):
         print("Invalid template type. Expected a string.")
         return
 
+    # 2- vérifier le type de attendees
     if not isinstance(attendees, list):
         print("Invalid attendees type. Expected a list. ")
         return
 
-    # Vérifier qye chaque élément est un dictionnaire
+    # 3-Vérifier qye chaque élément est un dictionnaire
     for person in attendees:
         if not isinstance(person, dict):
-            print("Invalid attendees type. Expected at list of dictionaries.")
+            print("Invalid attendees type. Expected a list of dictionaries.")
             return
 
-    # 2- vérifier su vide :
+    # 4- vérifier si le template est vide :
     if template.strip() == "":
         print("Template is empty, no output files generated.")
+        return
 
+    # 5 vérifier si la liste est vide
     if len(attendees) == 0:
         print("No data provided, no output files generated.")
         return
 
     # 3. Boucle sur chaque personne
-    index = 1
-
-    for person in attendees :
+    for index, person in enumerate(attendees, start=1):
 
         # copier le template
 
@@ -48,5 +49,3 @@ def generate_invitations(template, attendees):
 
         with open(filename, "w") as f:
             f.write(result)
-
-        index += 1
